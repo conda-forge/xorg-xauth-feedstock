@@ -1,5 +1,9 @@
 #!/bin/bash
-set -e -x
+# Get an updated config.sub and config.guess
+cp $BUILD_PREFIX/share/gnuconfig/config.* .
+
+set -e
+IFS=$' \t\n' # workaround for conda 4.2.13+toolchain bug
 
 # Adopt a Unix-friendly path if we're on Windows (see bld.bat).
 [ -n "$PATH_OVERRIDE" ] && export PATH="$PATH_OVERRIDE"
@@ -89,15 +93,14 @@ else
     )
 fi
 
-if [ "${CONDA_BUILD_CROSS_COMPILATION}" = "1" ] ; then
+if [[ "${CONDA_BUILD_CROSS_COMPILATION}" == "1" ]] ; then
     configure_args+=(
         --enable-malloc0returnsnull
     )
 fi
 ./configure "${configure_args[@]}"
-make -j${CPU_COUNT}
+make -j$CPU_COUNT
 make install
-
 rm -rf $uprefix/share/man $uprefix/share/doc/${PKG_NAME#xorg-}
 
 # Remove any new Libtool files we may have installed. It is intended that
