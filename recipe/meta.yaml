@@ -16,7 +16,7 @@ source:
     - windows.patch  # [win]
 
 build:
-  number: 3
+  number: 4
   detect_binary_files_with_prefix: true
 
 requirements:
@@ -24,9 +24,9 @@ requirements:
     - m2-autoconf  # [win]
     - m2-automake{{ am_version }}  # [win]
     - m2-libtool  # [win]
-    - m2w64-pkg-config  # [win]
+    - pkg-config  # [win]
     - pkg-config  # [not win]
-    - posix  # [win]
+    - m2-base  # [win]
     - gnuconfig  # [unix]
     - make
     - {{ stdlib('c') }}             # [unix]
