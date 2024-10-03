@@ -12,8 +12,6 @@ package:
 source:
   url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.xz
   sha256: {{ sha256 }}
-  patches:
-    - windows.patch  # [win]
 
 build:
   number: 0
@@ -44,7 +42,6 @@ requirements:
     - xorg-libxext
     - xorg-libxmu
     - xorg-xtrans
-    - xorg-xorgproto
     - xorg-util-macros
 
 test:
