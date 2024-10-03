@@ -19,6 +19,20 @@ else
     uprefix="$PREFIX"
 fi
 
+configure_args=(
+    ${CONFIG_FLAGS}
+    --disable-debug
+    --disable-dependency-tracking
+    --disable-selective-werror
+    --disable-silent-rules
+    --enable-tcp-transport
+    --enable-local-transport
+    --prefix=$mprefix
+    --sysconfdir=$mprefix/etc
+    --localstatedir=$mprefix/var
+    --libdir=$mprefix/lib
+)
+
 # On Windows we need to regenerate the configure scripts.
 if [ -n "$CYGWIN_PREFIX" ] ; then
     am_version=1.16 # keep sync'ed with meta.yaml
@@ -39,22 +53,7 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
     test -f $platlibs/libws2_32.a || { echo "error locating libws2_32" ; exit 1 ; }
     export LDFLAGS="$LDFLAGS -L$platlibs"
 
-    export PKG_CONFIG_LIBDIR="$uprefix/lib/pkgconfig:$uprefix/share/pkgconfig"
-    configure_args=(
-        ${CONFIG_FLAGS}
-        --disable-debug
-        --disable-dependency-tracking
-        --disable-selective-werror
-        --disable-silent-rules
-        --disable-unix-transport
-        --enable-tcp-transport
-        --enable-ipv6
-        --enable-local-transport
-        --prefix=$mprefix
-        --sysconfdir=$mprefix/etc
-        --localstatedir=$mprefix/var
-        --libdir=$mprefix/lib
-    )
+    configure_args+=(--disable-ipv6 --disable-unix-transport)
 else
     # Get an updated config.sub and config.guess
     cp $BUILD_PREFIX/share/gnuconfig/config.* .
@@ -68,24 +67,7 @@ else
     )
     autoreconf "${autoreconf_args[@]}"
 
-    export CONFIG_FLAGS="--build=${BUILD}"
-
-    export PKG_CONFIG_LIBDIR="$uprefix/lib/pkgconfig:$uprefix/share/pkgconfig"
-    configure_args=(
-        ${CONFIG_FLAGS}
-        --disable-debug
-        --disable-dependency-tracking
-        --disable-selective-werror
-        --disable-silent-rules
-        --enable-unix-transport
-        --enable-tcp-transport
-        --enable-ipv6
-        --enable-local-transport
-        --prefix=$mprefix
-        --sysconfdir=$mprefix/etc
-        --localstatedir=$mprefix/var
-        --libdir=$mprefix/lib
-    )
+    configure_args+=("--build=${BUILD}" --enable-ipv6)
 fi
 
 if [[ "${CONDA_BUILD_CROSS_COMPILATION}" == "1" ]] ; then
@@ -93,6 +75,8 @@ if [[ "${CONDA_BUILD_CROSS_COMPILATION}" == "1" ]] ; then
         --enable-malloc0returnsnull
     )
 fi
+
+export PKG_CONFIG_LIBDIR="$uprefix/lib/pkgconfig:$uprefix/share/pkgconfig"
 
 ./configure "${configure_args[@]}"
 make -j$CPU_COUNT
