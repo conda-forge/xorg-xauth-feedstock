@@ -16,7 +16,7 @@ source:
     - windows.patch  # [win]
 
 build:
-  number: 0
+  number: 1
 
 requirements:
   build:
@@ -44,7 +44,6 @@ requirements:
     - xorg-libxext
     - xorg-libxmu
     - xorg-xtrans
-    - xorg-xorgproto
     - xorg-util-macros
 
 test:
