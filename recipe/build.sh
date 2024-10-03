@@ -20,17 +20,16 @@ else
 fi
 
 configure_args=(
-    ${CONFIG_FLAGS}
-    --disable-debug
+    --prefix=$mprefix
+    --sysconfdir=$mprefix/etc
+    --localstatedir=$mprefix/var
+    --libdir=$mprefix/lib
+    --disable-static
     --disable-dependency-tracking
     --disable-selective-werror
     --disable-silent-rules
     --enable-tcp-transport
     --enable-local-transport
-    --prefix=$mprefix
-    --sysconfdir=$mprefix/etc
-    --localstatedir=$mprefix/var
-    --libdir=$mprefix/lib
 )
 
 # On Windows we need to regenerate the configure scripts.
@@ -40,7 +39,6 @@ if [ -n "$CYGWIN_PREFIX" ] ; then
     export AUTOMAKE=automake-$am_version
     autoreconf_args=(
         --force
-        --verbose
         --install
         -I "$mprefix/share/aclocal"
         -I "$BUILD_PREFIX_M/Library/usr/share/aclocal"
@@ -60,7 +58,6 @@ else
 
     autoreconf_args=(
         --force
-        --verbose
         --install
         -I "${PREFIX}/share/aclocal"
         -I "${BUILD_PREFIX}/share/aclocal"
@@ -70,13 +67,13 @@ else
     configure_args+=("--build=${BUILD}" --enable-ipv6)
 fi
 
+export PKG_CONFIG_LIBDIR=$uprefix/lib/pkgconfig:$uprefix/share/pkgconfig
+
 if [[ "${CONDA_BUILD_CROSS_COMPILATION}" == "1" ]] ; then
     configure_args+=(
         --enable-malloc0returnsnull
     )
 fi
-
-export PKG_CONFIG_LIBDIR="$uprefix/lib/pkgconfig:$uprefix/share/pkgconfig"
 
 ./configure "${configure_args[@]}"
 make -j$CPU_COUNT
