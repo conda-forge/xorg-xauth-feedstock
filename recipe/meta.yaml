@@ -44,6 +44,7 @@ requirements:
     - xorg-libxext
     - xorg-libxmu
     - xorg-xtrans
+    - xorg-xorgproto
     - xorg-util-macros
 
 test:
