@@ -1,8 +1,8 @@
 {% set xorg_name = "xauth" %}
 {% set xorg_category = "app" %}
 {% set name = "xorg-" ~ xorg_name %}
-{% set version = "1.1.3" %}
-{% set sha256 = "e7075498bae332f917f01d660f9b940c0752b2556a8da61ccb62a44d0ffe9d33" %}
+{% set version = "1.1.4" %}
+{% set sha256 = "e9318141464ad7b4dc0f8564a580f0d20f977c85a388cc40d5a766206151c690" %}
 {% set am_version = "1.16" %} # keep synchronized with build.sh
 
 package:
@@ -16,7 +16,7 @@ source:
     - windows.patch  # [win]
 
 build:
-  number: 2
+  number: 0
 
 requirements:
   build:
