@@ -12,10 +12,9 @@ package:
 source:
   url: https://www.x.org/releases/individual/{{ xorg_category }}/{{ xorg_name }}-{{ version }}.tar.xz
   sha256: {{ sha256 }}
-  patches:
-    - windows.patch  # [win]
 
 build:
+  skip: true  # [win]
   number: 0
 
 requirements:
